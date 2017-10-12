@@ -1,0 +1,60 @@
+12 Oct 21:04:28 line:279,fetchall INFO SELECT * FROM Guangzhou
+12 Oct 21:04:28 line:279,fetchall INFO SELECT * FROM Guangzhou
+12 Oct 21:04:36 line:318,showTables INFO [('Guangzhou',)]
+12 Oct 21:06:55 line:279,fetchall INFO SELECT * FROM Guangzhou
+12 Oct 21:06:55 line:279,fetchall INFO SELECT * FROM Guangzhou
+12 Oct 21:07:04 line:318,showTables INFO [('Guangzhou',)]
+12 Oct 23:42:13 line:300,select WARNING args is not list
+12 Oct 23:42:58 line:322,select WARNING near "%": syntax error
+12 Oct 23:45:18 line:300,select ERROR Type of tablename is not list(or None).
+12 Oct 23:45:34 line:325,select WARNING near "%": syntax error
+12 Oct 23:46:05 line:326,select WARNING near " ": syntax error
+12 Oct 23:47:10 line:324,select INFO  SELECT * FROM Guangzhou WHERE 1()
+12 Oct 23:47:12 line:358,showTables INFO [('Guangzhou',)]
+12 Oct 23:47:33 line:324,select INFO  SELECT * FROM Guangzhou WHERE 1()
+12 Oct 23:47:33 line:358,showTables INFO [('Guangzhou',)]
+12 Oct 23:48:25 line:324,select INFO  SELECT * FROM Guangzhou WHERE 1()
+12 Oct 23:48:25 line:358,showTables INFO [('Guangzhou',)]
+12 Oct 23:49:51 line:325,select INFO  SELECT * FROM Guangzhou WHERE 1()
+12 Oct 23:49:51 line:360,showTables INFO [('Guangzhou',)]
+12 Oct 23:57:01 line:329,select INFO  SELECT * FROM Guangzhou WHERE 1 and address LIKE ?('%金枫大道%',)
+12 Oct 23:57:01 line:364,showTables INFO [('Guangzhou',)]
+12 Oct 23:57:16 line:329,select INFO  SELECT * FROM Guangzhou WHERE 1 and address LIKE ?('%金枫大道%',)
+12 Oct 23:57:16 line:364,showTables INFO [('Guangzhou',)]
+12 Oct 23:57:54 line:329,select INFO  SELECT * FROM Guangzhou WHERE 1 and address LIKE ?('%金枫大道% or 1 ',)
+12 Oct 23:57:54 line:364,showTables INFO [('Guangzhou',)]
+13 Oct 00:40:21 line:329,select INFO  SELECT * FROM Guangzhou WHERE 1 and address LIKE ?('%金枫大道% and exists(select * from Guangzhou)',)
+13 Oct 00:40:21 line:364,showTables INFO [('Guangzhou',)]
+13 Oct 00:43:59 line:329,select INFO  SELECT * FROM Guangzhou WHERE 1 and address LIKE ?('%金枫大道% and exists(select * from Guangzhou)',)
+13 Oct 00:43:59 line:363,showTables INFO [('Guangzhou',)]
+13 Oct 00:44:39 line:329,select INFO  SELECT * FROM Guangzhou WHERE 1 and address LIKE ?('and exists(select * from Guangzhou)',)
+13 Oct 00:44:39 line:363,showTables INFO [('Guangzhou',)]
+13 Oct 00:55:51 line:329,select INFO  SELECT * FROM Guangzhou WHERE 1 and address LIKE ?('%大道% and exists(select * from Guangzhou)',)
+13 Oct 00:55:51 line:363,showTables INFO [('Guangzhou',)]
+13 Oct 00:56:01 line:329,select INFO  SELECT * FROM Guangzhou WHERE 1 and address LIKE ?('%大道%',)
+13 Oct 00:56:01 line:363,showTables INFO [('Guangzhou',)]
+13 Oct 01:00:25 line:329,select INFO  SELECT * FROM Guangzhou WHERE 1 and address LIKE ?('%大道%  union select name,sql from sqlite_master',)
+13 Oct 01:00:25 line:363,showTables INFO [('Guangzhou',)]
+13 Oct 01:13:12 line:336,select INFO  SELECT * FROM Guangzhou WHERE 1 and address LIKE ?('%大道%',)
+13 Oct 01:13:12 line:370,showTables INFO [('Guangzhou',)]
+13 Oct 01:13:31 line:336,select INFO  SELECT * FROM Guangzhou WHERE 1 and address LIKE ?('%镜湖大道%',)
+13 Oct 01:13:31 line:370,showTables INFO [('Guangzhou',)]
+13 Oct 01:13:50 line:317,select WARNING i[0] is not allowed.
+13 Oct 01:14:02 line:338,select WARNING Incorrect number of bindings supplied. The current statement uses 0, and there are 1 supplied.
+13 Oct 01:15:14 line:339,select INFO  SELECT * FROM Guangzhou WHERE 1 and lat= ?('%镜湖大道%',)
+13 Oct 01:15:14 line:373,showTables INFO [('Guangzhou',)]
+13 Oct 01:15:37 line:339,select INFO  SELECT * FROM Guangzhou WHERE 1 and lat= ?('!',)
+13 Oct 01:15:37 line:373,showTables INFO [('Guangzhou',)]
+13 Oct 01:15:44 line:339,select INFO  SELECT * FROM Guangzhou WHERE 1 and lat= ?('121',)
+13 Oct 01:15:44 line:373,showTables INFO [('Guangzhou',)]
+13 Oct 01:16:19 line:317,select WARNING i[0] is not allowed.
+13 Oct 01:16:25 line:317,select WARNING i[0] is not allowed.
+13 Oct 01:16:32 line:317,select WARNING i[0] is not allowed.
+13 Oct 01:16:41 line:339,select INFO  SELECT * FROM Guangzhou WHERE 1 and pano LIKE ?('121',)
+13 Oct 01:16:41 line:373,showTables INFO [('Guangzhou',)]
+13 Oct 01:16:53 line:339,select INFO  SELECT * FROM Guangzhou WHERE 1 and pano LIKE ?('%121',)
+13 Oct 01:16:53 line:373,showTables INFO [('Guangzhou',)]
+13 Oct 01:17:02 line:339,select INFO  SELECT * FROM Guangzhou WHERE 1 and pano LIKE ?('%121%',)
+13 Oct 01:17:02 line:373,showTables INFO [('Guangzhou',)]
+13 Oct 01:17:22 line:339,select INFO  SELECT * FROM Guangzhou WHERE 1 and pano LIKE ?('%12111%',)
+13 Oct 01:17:22 line:373,showTables INFO [('Guangzhou',)]
