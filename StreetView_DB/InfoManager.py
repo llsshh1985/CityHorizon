@@ -3,8 +3,13 @@ import os
 import logging
 
 class InfoManager(object):
+	'''常量声明'''
+
+	#防注入字符白名单
 	__box_name ="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_abcdefghijklmnopqrstuvwxyz."
 	__box_argsi = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+
+	#sql操作模板语句
 	__create_table_sql = '''CREATE TABLE %s (
 								`pano` ntext NOT NULL,
 								`heading` int NOT NULL,
@@ -13,54 +18,71 @@ class InfoManager(object):
 								`address` ntext NOT NULL,
 								`description` ntext NOT NULL,
 								PRIMARY KEY (`pano`)
-								)'''
+								)'''#ntext为UTF-8编码#decimal(总位数, 小数点后位数)#设置pano为key
 	__savein_sql = '''insert INTO %s values (?, ?, ?, ?, ?, ?)'''
 	__update_sql = '''UPDATE %s SET heading = ?, lat = ?, lng = ?, address = ?, description = ? WHERE pano = ?'''
 	__selectByRange_sql = ''' SELECT * FROM %s WHERE lat>=%f and lat<=%f and lng>=%f and lng<=%f'''
 	__select_sql = ''' SELECT * FROM %s WHERE 1'''
+
+	#列名分类列表
 	__key_box_ntext = ["pano", "address", "description"]
 	__key_box_int = ["heading"]
 	__key_box_float = ["lat", "lng"]
+
 	def __init__(self, add = None, log_le = None):
-		#logging
+		#初始化logging日志模块
 		logging.basicConfig(level= logging.INFO,
 							filename="DB_InfoManager.log",
 							filemode='a',
 							format='%(asctime)s line:%(lineno)d,%(funcName)s %(levelname)s %(message)s',
-                			datefmt='%d %b %H:%M:%S')
-		#
+                			datefmt='%d %b %H:%M:%S')#filemode设置为附加模式#format设置日志记录的格式
+		#logging模块是多线程安全的
+
+		#链接数据库
 		self.__conn=None
 		add_temp=add
 		address = ""
 		if(add_temp is not None and os.path.exists(add_temp)):
-			if(os.path.isfile(add_temp)):
+			if(os.path.isfile(add_temp)):#如果是文件则尝试打开
 				try:
 					self.__conn= sqlite3.connect(add_temp)
 				except Exception as err:
 					logging.warning(str(err))
 					print(str(err))
-			else:
+			else:#如果是目录则尝试在该目录下建立新的数据库
 				address = add_temp
 				print("The DB will be create under " + address)
-
-		while(self.__checktablename(add_temp) == False):
-			logging.warning("DB's name is not allowed.")
-			#print("The address or is empty.If the file is not exist, one will be created.")
-			add_temp = input ("Enter a name:")
-		self.__add = address + add_temp
-		#
-		try:
-			self.__conn= sqlite3.connect(self.__add)
-		except Exception as err:
-			logging.warning(str(err))
-			print(str(err))
-
+				while (self.__checktablename(add_temp) == False):  # 输入数据库文件名
+					logging.warning("DB's name is not allowed.")
+					# print("The address or is empty.If the file is not exist, one will be created.")
+					add_temp = input("Enter a name:")
+				self.__add = address + add_temp
+				# 尝试连接
+				try:
+					self.__conn = sqlite3.connect(self.__add)
+				except Exception as err:
+					logging.warning(str(err))
+					print(str(err))
+		else:
+			#如果add为None则在当前文件夹下建立数据库
+			while(self.__checktablename(add_temp) == False):#输入数据库文件名
+				logging.warning("DB's name is not allowed.")
+				#print("The address or is empty.If the file is not exist, one will be created.")
+				add_temp = input ("Enter a name:")
+			self.__add = address + add_temp
+			#尝试连接
+			try:
+				self.__conn= sqlite3.connect(self.__add)
+			except Exception as err:
+				logging.warning(str(err))
+				print(str(err))
+	'''内部函数'''
 	def __get_cu(self ):
 		if self.__conn is not None:
 			return self.__conn.cursor()
 		else:
 			return None
-
+	# 获取数据库指针
 	def __checktablename(self, tablename):
 		if (tablename is None or type(tablename) is not str or tablename == ''):
 			#logging.error("Type of tablename is not list(or None).")
@@ -69,6 +91,7 @@ class InfoManager(object):
 			if( i not in self.__box_name):
 				return False
 		return True
+	#检查表名
 	def __checkargsi(self,name):
 		if (name is None or type(name) is not str or name == ''):
 			#logging.error("Type of tablename is not list(or None).")
@@ -77,11 +100,13 @@ class InfoManager(object):
 			if( i not in self.__box_argsi):
 				return False
 		return True
+	#检查参数名
 	def __checkdata(self, data, typename):
 		if (data is None or type(data) is not typename):
 			#logging.error("Type of data is not list(or None).")
 			return False
 		return True
+	#检查数据格式
 	def __checknum(self, temp):
 		if(temp is None):
 			return False
@@ -93,7 +118,9 @@ class InfoManager(object):
 					return False
 			return True
 		return False
+	#检查数格式（支持元组）
 
+	'''新建表'''
 	def creNewTable(self, tablename = None):
 		if (self.__checktablename(tablename)==False):
 			logging.error("Type of tablename is not list(or None).")
@@ -113,8 +140,8 @@ class InfoManager(object):
 		except Exception as err:
 			logging.warning(str(err))
 			print(str(err))
-	'''Dengrous!!!'''
 
+	'''Dengrous!!!'''
 	def dropTable(self,tablename = None):
 		if (self.__checktablename(tablename)==False):
 			logging.error("Type of tablename is not list(or None).")
@@ -133,7 +160,7 @@ class InfoManager(object):
 			print(str(err))
 
 
-	'''savein:按补充数据库中与之前不同的条目。若pano已存在，则保留先前条目，不进行更新'''
+	'''savein:按补充数据库中的条目。若pano已存在，则保留先前条目，不进行更新'''
 	def savein_list(self, tablename = None, data = None):
 		if (self.__checkdata(data=data,typename=list)==False):
 			logging.error("Type of data is not list(or None).")
@@ -159,7 +186,6 @@ class InfoManager(object):
 				return False
 		else:
 			return False
-
 
 	def __savein(self,tablename = None,data = None, cu = None):
 		if (self.__checkdata(data=data, typename=tuple) == False):
@@ -203,7 +229,7 @@ class InfoManager(object):
 			return False
 
 
-	'''update:'''
+	'''update:按补充数据库中的条目。若pano已存在，则更新先前条目'''
 	def update_list(self, tablename = None, data = None):
 		if (self.__checkdata(data=data,typename=list)==False):
 			logging.error("Type of data is not list(or None).")
@@ -277,7 +303,7 @@ class InfoManager(object):
 			return False
 
 
-	'''GetInfo'''
+	'''GetInfo:获取数据库中的相关信息'''
 	def fetchall(self, tablename = None):
 		if (self.__checktablename(tablename) == False):
 			logging.error("Type of tablename is not list(or None).")
@@ -297,7 +323,7 @@ class InfoManager(object):
 			print(str(err))
 			return False
 		return r
-
+	#获取全部信息，返回值为list
 	def select(self, args = None, tablename =None):
 		r = None
 		if (self.__checktablename(tablename) == False):
@@ -341,6 +367,12 @@ class InfoManager(object):
 			logging.warning(str(err))
 			print(str(err))
 		return r
+	#按照要求获取信息，返回值为list
+	#args需为list，元素为元组。
+	# 每个元组包含两个元素，前一个必须为str，代表选取的列。
+	#如果列为ntext，则匹配模式为like，支持模糊匹配查找
+	#如果列为num，则匹配模式为数值等于，若想使用数值模糊匹配，可以使用selectByRange
+	#元组中后一个可以为数值或文本，代表查找内容。此处不限制参数类型，由上游模块过滤筛选。
 
 	def selectByRange(self,tablename = None, latran = (0,0), lngran = (0,0)):
 		if(self.__checktablename(tablename)==False):
@@ -364,7 +396,8 @@ class InfoManager(object):
 			logging.warning(str(err))
 			print(str(err))
 		return r
-
+	# 按照要求获取信息，返回值为list
+	#latran，lngran皆为元组: latran[0]<=result<=latran[1]（lngran同理）
 	def showTables(self):
 		cu = self.__get_cu()
 		try:
@@ -378,7 +411,7 @@ class InfoManager(object):
 			print(str(err))
 			return False
 		return r
-
+	#获取数据库中全部的表，返回值为list
 	def __del__(self):
 		self.__conn.close()
 		print("close")
