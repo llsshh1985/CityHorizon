@@ -1,19 +1,19 @@
 import os
 import sys
 
-def fil(x):
+def fil(x): #过滤空字符串
 	return list(filter(lambda x:x!="",x))
 
 class DataCleaner:
 	def __init__(self,city_name_in,city_wander_dir_in):
-		self.city_name=city_name_in
-		self.city_wander_dir=city_wander_dir_in
+		self.city_name=city_name_in #导入城市名
+		self.city_wander_dir=city_wander_dir_in #导入CityWander项目地址
 		self.data_clean_cache_dir=self.city_wander_dir+"Data_Cleaner/data_clean_cache/"
 
 		#self.pic_dir=
 		#dir_format:/Users/mac/Desktop/CityWander/
 
-	def get_file_name(self):
+	def get_file_name(self): #获取街景文件目录下的所有文件名
 		print("*****In function get_file_name*****")
 
 		def getListFiles(path):
@@ -45,14 +45,14 @@ class DataCleaner:
 		print("Heading 10 files:")
 		for i in output_str_name[0:10]:
 			print(i)
-		print("Other kinds of files:")
+		print("Other kinds of files:") #有时会出现系统缓存文件，需要手动删除
 		for i in output_str_name:
 			if(i.split(".")[1]!="jpg"):
 				print(i)
 
 		img_name_file_filtered.write(output_str)
 
-	def error_point_name(self):
+	def error_point_name(self): #使用文件名筛选出来的错误街景点
 
 		print("*****In function error_point_name*****")
 
@@ -63,14 +63,14 @@ class DataCleaner:
 
 		check_dict={}
 
-		error=[]
+		error=[] 
 		for i in range(len(filtered_name)):
 			tmp=filtered_name[i].split("_")
 			c1=str(tmp[0])
 			c2=tmp[1].split(".")[0]
 			c2=int(c2)
 			if(c1 in check_dict):
-				if(c2%90==check_dict[c1][0]):
+				if(c2%90==check_dict[c1][0]): #排查方式为判断每个街景点是否4个且模90同余
 					check_dict[c1][1]+=1
 				else:
 					error.append(c1)
@@ -103,7 +103,7 @@ class DataCleaner:
 		print("Total error points using name:",len(error))
 
 
-	def deleter_name(self):
+	def deleter_name(self): #删除error_point_name筛选出的文件
 		print("*****In function deleter_name*****")
 		#Be careful!!!!!!!!!!
 		error_file=open(self.data_clean_cache_dir+self.city_name+"_img_error_file_name.txt","r").read().split("\n")
@@ -119,7 +119,7 @@ class DataCleaner:
 			print("Nothing to delete!")
 
 
-	def get_info(self):
+	def get_info(self): #筛选现在剩余街景文件的信息
 
 		print("*****In function get_info*****")
 
@@ -173,7 +173,7 @@ class DataCleaner:
 		print("Filtered info set:",len(filtered_info_set))
 		filtered_info_file.write(output_str)
 
-	def error_point_info(self):
+	def error_point_info(self): #根据get_info方法筛选出的信息，找出信息有错误的街景点
 
 		print("*****In function error_point_info*****")
 
@@ -227,7 +227,7 @@ class DataCleaner:
 		print("Total error points using info:",len(error))
 
 
-	def deleter_info(self):
+	def deleter_info(self): #删除error_point_info方法找出的错误街景点
 
 		print("*****In function deleter_info*****")
 
@@ -246,7 +246,7 @@ class DataCleaner:
 		#delete redundant files
 
 
-	def error_info_to_name(self):
+	def error_info_to_name(self): #找出文件名和信息不匹配的点
 		print("*****In function error_info_to_name*****")
 
 		filtered_info_file=open(self.city_wander_dir+"Streetview_Spider/Catched_data/"+
@@ -284,7 +284,7 @@ class DataCleaner:
 
 		error_info_to_name_file=open(self.data_clean_cache_dir+self.city_name+"_img_error_info_to_name_file.txt","w")
 		error_info_to_name_file.write(output_str)
-	def deleter_info_to_name(self):
+	def deleter_info_to_name(self): #删除文件名和信息不匹配的点
 		print("*****In function deleter_info_to_name*****")
 		error_file=open(self.data_clean_cache_dir+self.city_name+"_img_error_info_to_name_file.txt","r").read().split("\n")
 		path=self.city_wander_dir+"Streetview_Pictures/"+self.city_name+"/"
