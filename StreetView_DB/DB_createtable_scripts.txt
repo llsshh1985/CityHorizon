@@ -1,9 +1,0 @@
-create_table_sql = '''CREATE TABLE `?` (
-`pano` int NOT NULL,
-`heading` int NOT NULL,
-`lat` ntext NOT NULL,
-`lng` ntext NOT NULL,
-`address` ntext NOT NULL,
-`description` ntext NOT NULL,
-PRIMARY KEY (`pano`)
-)'''

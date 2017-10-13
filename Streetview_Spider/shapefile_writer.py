@@ -4,9 +4,9 @@ import shapefile
 
 #基本路径设置
 city_name="Guangzhou"
-root_path="/Users/mac/Desktop/CityWander/"
-spider_path=root_path+"Streetview_Spider/"
-picture_path=root_path+"Streetview_Pictures/"
+city_wander_dir="/Users/mac/Desktop/CityWander/"
+spider_path=city_wander_dir+"Streetview_Spider/"
+picture_path=city_wander_dir+"Streetview_Pictures/"
 
 
 img_info_file = open(spider_path+"Catched_data/"+city_name+"/"+city_name+"_img_info_file.txt", 'r')
@@ -41,7 +41,7 @@ for i in dic:
 
 
 
-w.save(root_path+"City_Shapefile/"+city_name+"/"+city_name+"_Catched_Points")
+w.save(city_wander_dir+"City_Shapefile/"+city_name+"/"+city_name+"_Catched_Points")
 #point_shp.close()
 
 

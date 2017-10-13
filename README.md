@@ -1,32 +1,23 @@
-# CityWander
+# CityWander 城市漫游
 
-### Streetview_Spider用法：
+####城市漫游街景项目，由尹一航、林家桢、张少昂联合开发。
 
-#### 一、打开shapefile_reader.py
+---
 
-1、“#基本路径设置”中修改city_name
+### 项目介绍
 
-2、可以先运行shapefile_reader.py，设置stop_cnt变量为Total Points数量，北京应为60000。
+城市漫游街景项目，是以腾讯街景开放平台为依托，利用深度学习语义分割算法，对城市中楼房、树木、行人、车辆等类别的分布进行分析，并使用深层神金网络分析城市风格特征，目前分析的城市有北京、上海、广州。该项目由北京航空航天大学计算机学院本科生尹一航、林家桢、张少昂联合开发。
 
-3、修改后再运行一次shapefile_reader.py
+### 项目功能模块
 
-#### 二、打开key.txt
+Streetview_Spider 街景爬虫模块
 
-将所有的time设为10000，当time值小于key_module.py中的alert值时，爬虫将停止。
+Data_Cleaner 数据清洗模块
 
-#### 三、打开main.py
+Database_Manager 数据管理模块
 
-1、“#基本路径设置”中修改city_name
+Semantic_Segmentation 语义分割模块
 
-2、直接运行main.py即可。
+###联系作者
 
-
-
-### 意外情况：
-
-1、main.py执行过程中出现中断，此时请正常结束main.py的运行，如在shell中使用“ctrl+C”，此时main.py会更改key.txt。之后可以重新运行main.py，数据不会丢失，会接着上一次的进度爬取。
-
-2、若想完全重新爬取，需要删除目录“Streetview_Spider/Cache/”下的所有文件，同时删除目录“Streetview_Spider/Catched_data/”中对应城市文件夹中的所有文件。
-
-3、连续出现大量“No pano！”，很可能是因为当天腾讯街景key的额度已经达到上限，此时应该停止爬取，并在下一次爬取前，将key.txt中值设为10000。此时，应查看Cache文件中的Cityname_catchlog_file.txt，并找到最后一条有街景点的记录，将其后的记录内容删除，即可继续上一次的爬取。
-
+联系人：尹一航，someday@buaa.edu.cn

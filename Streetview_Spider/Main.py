@@ -5,9 +5,9 @@ import time;
 
 #基本路径设置
 city_name="Beijing"
-root_path="/Users/mac/Desktop/CityWander/"
-spider_path=root_path+"Streetview_Spider/"
-picture_path=root_path+"Streetview_Pictures/"
+city_wander_dir="/Users/mac/Desktop/CityWander/"
+spider_path=city_wander_dir+"Streetview_Spider/"
+picture_path=city_wander_dir+"Streetview_Pictures/"
 
 if __name__=="__main__":
     #此行导入数据，请勿删除
