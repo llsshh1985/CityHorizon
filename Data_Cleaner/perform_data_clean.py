@@ -2,6 +2,7 @@ from DataCleaner import *
 #dir format:/Users/mac/Desktop/CityWander/
 cleaner=DataCleaner("Shanghai","/Users/mac/Desktop/CityWander/")
 
+print("City:",cleaner.city_name)
 cleaner.get_file_name()
 cleaner.error_point_name()
 cleaner.deleter_name()
