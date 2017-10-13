@@ -1,9 +1,12 @@
 #ignore the pictures directory
 Streetview_Pictures/
-Streetview_Spider/__pycache__ 
+#Streetview_Spider/__pycache__ 
 Streetview_Spider/Cache 
 Streetview_Spider/Catched_data
-Streetview_Database
-  
+Data_Cleaner/data_clean_cache
+#python cache
+*.pyc
+
+
 
 

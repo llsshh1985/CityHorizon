@@ -1,6 +1,6 @@
 # CityWander 城市漫游
 
-####城市漫游街景项目，由尹一航、林家桢、张少昂联合开发。
+####  城市漫游街景项目，由尹一航、林家桢、张少昂联合开发。
 
 ---
 
@@ -10,14 +10,13 @@
 
 ### 项目功能模块
 
-Streetview_Spider 街景爬虫模块
+| 目录                    | 模块     |
+| --------------------- | ------ |
+| Streetview_Spider     | 街景爬虫模块 |
+| Data_Cleaner          | 数据清洗模块 |
+| Database_Manager      | 数据管理模块 |
+| Semantic_Segmentation | 语义分割模块 |
 
-Data_Cleaner 数据清洗模块
-
-Database_Manager 数据管理模块
-
-Semantic_Segmentation 语义分割模块
-
-###联系作者
+### 联系作者
 
 联系人：尹一航，someday@buaa.edu.cn
