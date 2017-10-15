@@ -1,6 +1,6 @@
 from DataCleaner import *
 #dir format:/Users/mac/Desktop/CityWander/
-cleaner=DataCleaner("Shanghai","/Users/mac/Desktop/CityWander/")
+cleaner=DataCleaner("Guangzhou","/data/yyh/CityWander/")
 
 print("City:",cleaner.city_name)
 
