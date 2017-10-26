@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 This script visualize the semantic segmentation of ENet.
@@ -9,7 +9,11 @@ from argparse import ArgumentParser
 from os.path import join
 import argparse
 import sys
-caffe_root = 'ENet/caffe-enet/'  # Change this to the absolute directory to ENet Caffe
+caffe_root = '/home/yyh/ENet/caffe-enet/'  # Change this to the absolute directory to ENet Caffe
+ENet_dir='/home/yyh/ENet/'
+city_wander_dir='/data/yyh/CityWander/'
+catched_data_dir=city_wander_dir+'Streetview_Spider/Catched_data/'
+
 sys.path.insert(0, caffe_root + 'python')
 import caffe
 sys.path.append('/usr/local/lib/python2.7/site-packages')
@@ -21,20 +25,25 @@ __university__ = 'Aschaffenburg University of Applied Sciences'
 __email__ = 'Timo.Saemann@gmx.de'
 __data__ = '24th May, 2017'
 
-
-img_name_file=open()
-files=img_name_file.read().split("\n")
-files=list(filter(lambda x:x!="",files))
+def fil(x): #过滤空字符串
+    return list(filter(lambda x:x!="",x))
 
 def make_parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--model', type=str, required=True, help='.prototxt file for inference')
-    parser.add_argument('--weights', type=str, required=True, help='.caffemodel file')
-    parser.add_argument('--colours', type=str, required=True, help='label colours')
-    parser.add_argument('--input_image', type=str, required=True, help='input image path')
-    parser.add_argument('--out_dir', type=str, default=None, help='output directory in which the segmented images '
-                                                                   'should be stored')
+
+    parser.add_argument('--model', type=str, default=ENet_dir+'prototxts/enet_deploy_final.prototxt', help='.prototxt file for inference')
+    parser.add_argument('--weights', type=str, default=ENet_dir+'enet_weights_zoo/cityscapes_weights.caffemodel', help='.caffemodel file')
+    parser.add_argument('--colours', type=str, default=ENet_dir+'scripts/cityscapes19.png', help='label colours')
+    parser.add_argument('--out_dir', type=str, default=None, help='output directory in which the segmented images '                                                             'should be stored')
     parser.add_argument('--gpu', type=str, default='0', help='0: gpu mode active, else gpu mode inactive')
+    parser.add_argument('--city_name', type=str, default='Beijing', help='0: gpu mode active, else gpu mode inactive')
+
+    #parser.add_argument('--model', type=str, required=True, help='.prototxt file for inference')
+    #parser.add_argument('--weights', type=str, required=True, help='.caffemodel file')
+    #parser.add_argument('--colours', type=str, required=True, help='label colours')
+    #parser.add_argument('--input_image', type=str, required=True, help='input image path')
+    #parser.add_argument('--out_dir', type=str, default=None, help='output directory in which the segmented images '                                                             'should be stored')
+    
 
     return parser
 
@@ -54,12 +63,28 @@ if __name__ == '__main__':
 
     label_colours = cv2.imread(args.colours, 1).astype(np.uint8)
 
-    #####read files
-    for i in files:
+    #####read input_files
 
-        args.input_image=i
+    input_files=open(catched_data_dir+args.city_name+"/"+args.city_name+"_img_name_file_filtered.txt","r")
+    input_files=input_files.read().split("\n")
+    input_files=fil(input_files)
+
+    log_set_dir = city_wander_dir+"Semantic_Segmentation/segmentation_cache/"+args.city_name+"_segmentation_log.txt"
+    log_set_file = open(log_set_dir,"a+")
+    log_set = log_set_file.read()
+    log_set = fil(log_set.split("\n"))
+    log_set = set(log_set)
+    log_set_file.close()
+
+    for i in input_files:
+
+        if(i in log_set):
+            continue
+
+        args.input_image=city_wander_dir+"Streetview_Pictures/"+args.city_name+"/"+i
 
         input_image = cv2.imread(args.input_image, 1).astype(np.float32)
+        input_image = input_image[0:600, 0:960] #去掉水印保留从左上角开始600*960的图片
 
         input_image = cv2.resize(input_image, (input_shape[3], input_shape[2]))
         input_image = input_image.transpose((2, 0, 1))
@@ -80,22 +105,25 @@ if __name__ == '__main__':
         #cv2.imshow("ENet", prediction_rgb)
         key = cv2.waitKey(0)
 
+        args.out_dir = city_wander_dir+"Label_Pictures/"+args.city_name+"/"
 
+        input_path_ext = args.input_image.split(".")[-1]
+        input_image_name = args.input_image.split("/")[-1:][0].replace('.' + input_path_ext, '')
 
-        if args.out_dir is not None:
-            input_path_ext = args.input_image.split(".")[-1]
-            input_image_name = args.input_image.split("/")[-1:][0].replace('.' + input_path_ext, '')
-            
-            args.out_dir=""
+       # args.out_dir = city_wander_dir + args.city_name
+        out_path_label = args.out_dir + input_image_name + '_label' + '.png'
+        
+        cv2.imwrite(out_path_label, prediction_rgb) 
 
-            out_path_im = args.out_dir + input_image_name + '_enet' + '.' + input_path_ext
-            cv2.imwrite(out_path_im, prediction_rgb)
-            
-            args.out_dir=""
-
-            out_path_gt = args.out_dir + input_image_name + '_enet_gt' + '.' + input_path_ext
-            cv2.imwrite(out_path_gt, prediction) #  label images, where each pixel has an ID that represents the class
-
+        log_change_dir = city_wander_dir+"Semantic_Segmentation/segmentation_cache/"+args.city_name+"_segmentation_log.txt"
+        log_change_file = open(log_set_dir,"a+")
+        log_set.add(i)
+        log_change_file.write(i+"\n")
+        log_change_file.close()
+        #  label images, where each pixel has an ID that represents the class
+	#print "City:",args.city_name,"|| Total:",len(input_files),"|| Now:",len(log_set),"|| Now_pic:",i
+	print "City: %10s || Total: %5d || Now: %5d || Percent: %.3f || Now_pic: %35s"%(args.city_name,len(input_files),len(log_set),1.0*len(log_set)/len(input_files),i)
+        
 
 
 

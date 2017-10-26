@@ -1,7 +1,10 @@
 #ignore the pictures directory
 Streetview_Pictures/
+Label_Pictures/
 #Streetview_Spider/__pycache__ 
 Streetview_Spider/Cache 
+Semantic_Segmentation/test_label
+Semantic_Segmentation/segmentation_cache
 Streetview_Spider/Catched_data
 Data_Cleaner/data_clean_cache
 #python cache
