@@ -98,9 +98,9 @@ if __name__ == '__main__':
         prediction = np.resize(prediction, (3, input_shape[2], input_shape[3]))
         prediction = prediction.transpose(1, 2, 0).astype(np.uint8)
 
-        prediction_rgb = np.zeros(prediction.shape, dtype=np.uint8)
-        label_colours_bgr = label_colours[..., ::-1]
-        cv2.LUT(prediction, label_colours_bgr, prediction_rgb)
+       # prediction_rgb = np.zeros(prediction.shape, dtype=np.uint8)
+       # label_colours_bgr = label_colours[..., ::-1]
+       # cv2.LUT(prediction, label_colours_bgr, prediction_rgb)
 
         #cv2.imshow("ENet", prediction_rgb)
         key = cv2.waitKey(0)
@@ -113,7 +113,7 @@ if __name__ == '__main__':
        # args.out_dir = city_wander_dir + args.city_name
         out_path_label = args.out_dir + input_image_name + '_label' + '.png'
         
-        cv2.imwrite(out_path_label, prediction_rgb) 
+        cv2.imwrite(out_path_label, prediction) 
 
         log_change_dir = city_wander_dir+"Semantic_Segmentation/segmentation_cache/"+args.city_name+"_segmentation_log.txt"
         log_change_file = open(log_set_dir,"a+")
