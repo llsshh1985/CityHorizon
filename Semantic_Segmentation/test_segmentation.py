@@ -41,7 +41,7 @@ def make_parser():
     parser.add_argument('--colours', type=str, default=ENet_dir+'scripts/cityscapes19.png', help='label colours')
     parser.add_argument('--out_dir', type=str, default=None, help='output directory in which the segmented images '                                                             'should be stored')
     parser.add_argument('--gpu', type=str, default='0', help='0: gpu mode active, else gpu mode inactive')
-    parser.add_argument('--city_name', type=str, required=Ture , help='argument city_name is necessary')
+    parser.add_argument('--city_name', type=str, required=True , help='argument city_name is necessary')
 
     #parser.add_argument('--model', type=str, required=True, help='.prototxt file for inference')
     #parser.add_argument('--weights', type=str, required=True, help='.caffemodel file')
