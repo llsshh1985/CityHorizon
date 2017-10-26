@@ -15,6 +15,7 @@ t3 = threading.Thread(target=segmentation,args=(u"Guangzhou",))
 threads.append(t3)
 
 if __name__ == '__main__':
+	#多线程，一个city一个线程
     for t in threads:
         t.setDaemon(True)
         t.start()
